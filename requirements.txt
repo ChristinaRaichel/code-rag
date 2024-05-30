@@ -1,0 +1,4 @@
+pandas
+pyarrow==11.0.0
+datasets
+weaviate-client==3.*
