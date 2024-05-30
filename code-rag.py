@@ -1,4 +1,8 @@
 
+from datasets import load_dataset
+import weaviate
+import logging as log
+
 def create_class(client, classname):
     class_obj = {
         "class": classname,
@@ -79,29 +83,40 @@ def rag_function(concept, client):
 
 
 
-from datasets import load_dataset
-import weaviate
-
 
 if '__name__' == '__main__':
-    dataset = load_dataset('flytech/python-codes-25k', split='train')
-    print('loaded dataset')
 
-    client = weaviate.Client(
-        url = "https://weaviate-code-arg-e8eh4did.weaviate.network",  
-        auth_client_secret=weaviate.auth.AuthApiKey(api_key="uhBe7uqF43N5douqKj50gWQGxtZIpWHHv48N"),  
-        additional_headers = {
-        "X-Cohere-Api-Key": "GJEKFhYN1dT2OLFAPTWP6Ig1IDfNduhseC8wxgPw"  
-        }
-    )
-    print('client created')
+    try:
+        dataset = load_dataset('flytech/python-codes-25k', split='train')
+        print(dataset[1])
+        log.info('loaded dataset')
+    except:
+        print('an exception occured')
+        log.error('dataset not loaded')
     
-    create_class(client, classname = "CodeDoc")
+
+    """try:
+        client = weaviate.Client(
+            url = "https://weaviate-code-arg-e8eh4did.weaviate.network",  
+            auth_client_secret=weaviate.auth.AuthApiKey(api_key="uhBe7uqF43N5douqKj50gWQGxtZIpWHHv48N"),  
+            additional_headers = {
+            "X-Cohere-Api-Key": "GJEKFhYN1dT2OLFAPTWP6Ig1IDfNduhseC8wxgPw"  
+            }
+        )
+        log.info('client created')
+    except:
+        log.error('client cannot be created')
+        raise ConnectionRefusedError
+        
+
+    
+    create_class(client, classname = "CodeDocv1")
+    log.info('class created')
     import_data(client, dataset)
-    print('data imported in collection')
+    log.info('data imported in collection')
     concept = ['code for phone usage check']
-    print('finding code and explanation')
+    log.info('finding code and explanation')
     explanation_pseudo, code = rag_function(concept)
     print(explanation_pseudo)
     print(code)
-    
+    """
