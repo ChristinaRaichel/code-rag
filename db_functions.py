@@ -1,7 +1,4 @@
-
-
 from datasets import load_dataset
-import weaviate
 import logging as log
 
 def create_class(client, classname):
@@ -28,8 +25,7 @@ def create_class(client, classname):
     client.schema.create_class(class_obj)
     
 
-
-def import_data(client,dataset, batch_size = 200,timeout_retries=3):
+def import_data(client,classname,dataset, batch_size = 200,timeout_retries=3):
 
     client.batch.configure(
     batch_size=batch_size,
@@ -63,11 +59,37 @@ def import_data(client,dataset, batch_size = 200,timeout_retries=3):
     print("Import complete")
 
 
-def rag_function(concept, client, classname):
+def populate(client, classname):
+    
+    log.getLogger().setLevel(log.INFO)
+
+    try:
+        dataset = load_dataset('flytech/python-codes-25k', split='train')
+        log.info('loaded dataset')
+    except:
+        print('an exception occured')
+        log.error('dataset not loaded')
+
+  
+    try:
+        create_class(client, classname = classname)
+        log.info('class created')
+    except:
+        log.error('class not created')
+        
+    try:
+        import_data(client,classname, dataset)
+        log.info('data imported in collection')
+    except:
+        log.error('Error importing data')
+
+
+
+def find_and_rag(concept, client, classname):
     generatePrompt = "explain {output} as if to a learner and generate psedocode/algorithm for {output}"
     
     result = (
-    client.query
+    client.query    
     .get(classname, ["instruction", "output"])
     .with_generate(single_prompt=generatePrompt)
     .with_near_text({
@@ -80,53 +102,4 @@ def rag_function(concept, client, classname):
         explanation_pseudo = result['data']['Get'][classname][0]['_additional']['generate']['singleResult']
         code = result['data']['Get'][classname][0]['output']
     return explanation_pseudo, code
-
-
-classname = "CodeDocv4"
-
-log.getLogger().setLevel(log.INFO)
-
-try:
-    dataset = load_dataset('flytech/python-codes-25k', split='train')
-    log.info('loaded dataset')
-except:
-    print('an exception occured')
-    log.error('dataset not loaded')
-
-try:
-    client = weaviate.Client(
-        url = "https://weaviate-code-arg-e8eh4did.weaviate.network",  
-        auth_client_secret=weaviate.auth.AuthApiKey(api_key="uhBe7uqF43N5douqKj50gWQGxtZIpWHHv48N"),  
-        additional_headers = {
-        "X-Cohere-Api-Key": "GJEKFhYN1dT2OLFAPTWP6Ig1IDfNduhseC8wxgPw"  
-        }
-    )
-    log.info('client created')
-except:
-    log.error('client cannot be created')
-    raise ConnectionRefusedError
-
-try:
-    create_class(client, classname = classname)
-    log.info('class created')
-except:
-    log.error('class not created')
-    
-try:
-    import_data(client, dataset)
-    log.info('data imported in collection')
-except:
-    log.error('Error importing data')
-
-
-concept = ["code for shopping list"]
-log.info('finding code and explanation')
-
-try:
-    explanation_pseudo, code = rag_function(concept, client, classname = classname)
-    print(explanation_pseudo)
-    print(code)
-except:
-    log.error('Error generating code and explanation')
-client.schema.delete_class(classname) 
 
