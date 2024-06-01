@@ -1,0 +1,89 @@
+commit 78a1b10b18daf8e09d4fd6833f163c1a8a142261
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Sat Jun 1 06:46:00 2024 +0100
+
+    no changes
+
+commit 5ed5fab7cc9aa92d04a85dfe4005f98db8addef4
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Sat Jun 1 06:07:16 2024 +0100
+
+    updated to old style
+
+commit d12d7e7e4286d5bf353ff50c36bba02a818969c1
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Sat Jun 1 05:50:37 2024 +0100
+
+    notebook reset
+
+commit 039d66d880441c4af887e3e0ea3d918110939acb
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Sat Jun 1 05:44:29 2024 +0100
+
+    frontend update
+
+commit 5ed857870177f1145e696b8aa0cb83974976021c
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Sat Jun 1 05:28:59 2024 +0100
+
+    changes in css and components
+
+commit 186351fb422ee888c04d063a51bf1738fef6b49a
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Sat Jun 1 05:19:26 2024 +0100
+
+    recollcted frontend parts
+
+commit 0bb6624279557d170149c6c21d65a61849575bce
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Sat Jun 1 05:13:31 2024 +0100
+
+    app.js updated
+
+commit 85760daf089a03241537909ef90ad25a3bf4ac52
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Fri May 31 04:53:09 2024 +0100
+
+    tailwind installed
+
+commit e04d5ac5ff23686d98344d5c1bece4585692b3b2
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Thu May 30 16:23:00 2024 +0100
+
+    removed app.css,x.test.js,logo.svg,report..js,setupTests.js
+
+commit 3f20d110c854e75040a5f15ea457660e4ee45afd
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Thu May 30 16:12:03 2024 +0100
+
+    requirements moved to backend, installed reactjs on frontend folder
+
+commit b6a48c650bb890560b9a376bf6015a8e218d627f
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Thu May 30 16:06:52 2024 +0100
+
+    created backend folder and moved db_functions to backend
+
+commit 81869b7148a1e1b5e0959a041d0b416b978fd194
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Thu May 30 15:59:13 2024 +0100
+
+    separated populate and find functions, created notebook
+
+commit 938a14f1f308cacce58dc7bb5e8121752f792a32
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Thu May 30 14:42:04 2024 +0100
+
+    py file updated with exceptions
+
+commit 1c02e1697aaa149ecbb132552bb336af05abde2f
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Thu May 30 12:26:33 2024 +0100
+
+    update code-rag
+
+commit 40bf695f3aef8dcc269a4492bec25fa6c55c070b
+Author: ChristinaRaichel <celestianc.73@gmail.com>
+Date:   Thu May 30 12:25:15 2024 +0100
+
+    first commit
