@@ -14,7 +14,7 @@ const Hero = () => {
     <div className="row-span-2">
         <div className='absolute top-[15%] w-60 flex flex-col text-black p-4'>
           <h2 className='font-bold text-4xl'> Turn your daily tasks into code! </h2>
-          <h1 className='font-italic font-medium text-blue-950 '>This tool hooks you up with explanations, pseudocode, and Python code for whatever you're tackling in your day-to-day life</h1>
+          <h1 className='font-italic font-light text-blue-950 '>This tool hooks you up with explanations, pseudocode, and Python code for whatever you're tackling in your day-to-day life</h1>
           <form className='search'>
             <div className='py-5'>
               <p className='search-text'> Search for your task to generate code </p>
