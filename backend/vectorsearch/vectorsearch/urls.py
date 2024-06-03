@@ -25,7 +25,6 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path(r'gencode/', views.TaskQueryClass.as_view()),
-    path('sample/', views.SampleClass.as_view()),
     path(r'', include(router.urls))
     
 

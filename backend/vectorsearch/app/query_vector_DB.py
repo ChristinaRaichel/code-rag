@@ -9,10 +9,10 @@ import os
 class queryVectorDB():
     """
     Class for the vector database
-    """
+    """ 
     def __init__(self):
         self.client = self.start()
-        self.classname = 'CodeDocv13'
+        self.classname = 'CodeDocv20'
 
     def start(self):
         

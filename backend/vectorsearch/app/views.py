@@ -17,6 +17,18 @@ from rest_framework.response import Response
 logger = logging.getLogger(__name__)
 
 class TaskQueryClass(APIView):
+    def __init__(self):
+        self.qvb = None
+        self.class_init_bool = False
+
+    @csrf_exempt
+    def get(self,request):
+        self.qvb = queryVectorDB()
+        if self.qvb == False : return
+        self.class_init_bool = self.qvb.initiate_weaviate_class()
+        return HttpResponseBadRequest("hello world")
+
+    @csrf_exempt
     def post(self,request):
         try:
             data = json.loads(request.body)
@@ -25,12 +37,9 @@ class TaskQueryClass(APIView):
             logging.info('Obtained task input')
 
             if task is not None:
-                qvb = queryVectorDB()
-                if qvb == False : return
                 
-                if qvb.initiate_weaviate_class():
-
-                    result = qvb.get_data(task)
+                if self.class_init_bool :
+                    result = self.qvb.get_data(task)
 
                     if result is not None:
                         response_data = {
@@ -38,6 +47,7 @@ class TaskQueryClass(APIView):
                             'message': 'File received and processed successfully',
                             'data': result
                         }
+                        print(response_data)
                         return JsonResponse(response_data)
                     else:
                         return HttpResponseBadRequest("Failed to GET the data from vector database")
@@ -47,12 +57,4 @@ class TaskQueryClass(APIView):
                 return HttpResponseBadRequest("No input received")
         except json.JSONDecodeError:
             return HttpResponseBadRequest("Invalid JSON data")
-        
-
-class SampleClass(APIView):
-    def post(self,request):
-        serializer = TaskSerializer(data=request.data)
-        if serializer.is_valid(raise_exception = True):
-            serializer.save()
-            return Response(serializer.data)
         
