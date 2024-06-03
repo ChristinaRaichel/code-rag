@@ -20,10 +20,13 @@ from django.urls import path, include
 from app import views
 from rest_framework import routers
 
-
 router = routers.DefaultRouter()
 
+
 urlpatterns = [
-    path(r'', views.get_code_and_data),
+    path(r'gencode/', views.TaskQueryClass.as_view()),
+    path('sample/', views.SampleClass.as_view()),
+    path(r'', include(router.urls))
+    
 
 ]
