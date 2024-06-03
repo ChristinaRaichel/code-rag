@@ -104,8 +104,12 @@ def find_and_rag(concept, client, classname):
     .with_limit(1)
     ).do()
     print(result)
-    if result:
+
+    try:
         explanation_pseudo = result['data']['Get'][classname][0]['_additional']['generate']['singleResult']
         code = result['data']['Get'][classname][0]['output']
-    return explanation_pseudo, code
+        print(code)
+        return explanation_pseudo, code
 
+    except:
+        log.error('Search data is null', exc_info=True)
