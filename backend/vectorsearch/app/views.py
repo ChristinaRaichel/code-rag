@@ -21,23 +21,28 @@ class TaskQueryClass(APIView):
         try:
             data = json.loads(request.body)
             task = data.get('task')
+            print(task)
+            logging.info('Obtained task input')
 
             if task is not None:
-                data = task 
-                vector_db_endpoint = "http://localhost:8080"
-                qvb = queryVectorDB(vector_db_endpoint)
-                query = task
-                result = qvb.get_data(query)
+                qvb = queryVectorDB()
+                if qvb == False : return
+                
+                if qvb.initiate_weaviate_class():
 
-                if result is not None:
-                    response_data = {
-                        'status': 'success',
-                        'message': 'File received and processed successfully',
-                        'data': result
-                    }
-                    return JsonResponse(response_data)
+                    result = qvb.get_data(task)
+
+                    if result is not None:
+                        response_data = {
+                            'status': 'success',
+                            'message': 'File received and processed successfully',
+                            'data': result
+                        }
+                        return JsonResponse(response_data)
+                    else:
+                        return HttpResponseBadRequest("Failed to GET the data from vector database")
                 else:
-                    return HttpResponseBadRequest("Failed to GET the data from vector database")
+                    return HttpResponseBadRequest("Error initiating weaviate collection")
             else:
                 return HttpResponseBadRequest("No input received")
         except json.JSONDecodeError:

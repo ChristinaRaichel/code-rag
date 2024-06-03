@@ -1,7 +1,10 @@
-from .db_functions import populate, find_and_rag
-import secrets
+from .db_functions import load_data_create_class, find_and_rag
 import logging as log
 import weaviate
+
+from dotenv import load_dotenv
+import os
+
 
 class queryVectorDB():
     """
@@ -9,35 +12,40 @@ class queryVectorDB():
     """
     def __init__(self):
         self.client = self.start()
+        self.classname = 'CodeDocv13'
 
     def start(self):
-        """
-        Start the client
-
-        Args:
-            endpoint(str): URL endpoint for where the weaviate instance is
         
-        Returns:
-            weaviate.Client
-
-        Example:
-            start("http://localhost:8080")
-        """
         try:
+            load_dotenv()
+            WEAVIATE_AUTH_KEY = os.getenv("WEAVIATE_AUTH_KEY")
+            WEAVIATE_URL = os.getenv("WEAVIATE_URL")
+            COHERE_API_KEY = os.getenv("COHERE_API_KEY")
+            
             client = weaviate.Client(
-            url = secrets.WEAVIATE_URL,  
-            auth_client_secret=weaviate.auth.AuthApiKey(api_key=secrets.WEAVIATE_AUTH_KEY),  
+            url = WEAVIATE_URL,  
+            auth_client_secret=weaviate.auth.AuthApiKey(api_key=WEAVIATE_AUTH_KEY),  
             additional_headers = {
-            "X-Cohere-Api-Key": secrets.COHERE_API_KEY
+            "X-Cohere-Api-Key": COHERE_API_KEY
             }
-        )
-            log.info('client created')
+            )
+            log.info('Client connected')
             return client
-        except Exception as E:
-            log.error('client cannot be created')
-            print("Client not connected!")
-            return 
         
+        except Exception as e:
+            log.error('Client cannot be created', exc_info=True)
+            return False
+    
+    def initiate_weaviate_class(self):
+        try : 
+            load_data_create_class(self.client, self.classname)
+        except:
+            log.error('Class creation or populate error')   
+            return
+        log.info('Class created and populated')
+        return True
+
+
     
     def get_data(self, query:str):
         """
@@ -47,18 +55,19 @@ class queryVectorDB():
         """
         concept = query
         client = self.client
-        classname = 'CodeDocv4'
+        
 
-        log.info('finding code and explanation')
+        log.info('Generating code(Vector Search) and explanation (RAG based)')
         concept =  ["code for shopping list"]
 
         try:
-            explanation_pseudo, code = find_and_rag(concept, client, classname = classname)
+            explanation_pseudo, code = find_and_rag(concept, client, classname = self.classname)
             result = {'exp_pseudo': explanation_pseudo,
                       'code': code}
+            return result
 
         except:
-            log.error('Error generating code and explanation')
+            log.error('Error generating code and explanation',exc_info=True)
 
-        return result
+        
     
