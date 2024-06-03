@@ -1,5 +1,6 @@
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
 from rest_framework import viewsets
 import asyncio
 import os
@@ -7,21 +8,16 @@ from django.shortcuts import render
 import json
 from .query_vector_DB import queryVectorDB
 import logging
+from .models import Task
+
+
+from .serializer import *
+from rest_framework.response import Response
 
 logger = logging.getLogger(__name__)
 
-@csrf_exempt
-def get_code_and_data(request):
-    """
-    Args:
-        request (file): File object of form data
-
-    Returns:
-        JsonResponse: Formatted JsonResponse object on success
-        """
-    logger.info("get code views up and running")
-                
-    if request.method == 'POST':
+class TaskQueryClass(APIView):
+    def post(self,request):
         try:
             data = json.loads(request.body)
             task = data.get('task')
@@ -46,6 +42,12 @@ def get_code_and_data(request):
                 return HttpResponseBadRequest("No input received")
         except json.JSONDecodeError:
             return HttpResponseBadRequest("Invalid JSON data")
-    else:
-        return HttpResponseBadRequest("Invalid request method")
-    
+        
+
+class SampleClass(APIView):
+    def post(self,request):
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid(raise_exception = True):
+            serializer.save()
+            return Response(serializer.data)
+        
