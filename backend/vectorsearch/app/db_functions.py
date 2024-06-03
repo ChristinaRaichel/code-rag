@@ -53,7 +53,7 @@ def import_data(client,classname,dataset, batch_size = 200,timeout_retries=3):
             
             batch.add_data_object(properties, classname)
             counter = counter+1
-            if counter == 5: break
+            if counter == 1: break
             
         print(f"Import {counter} / {len(dataset)}")
     print("Import complete")
@@ -103,12 +103,11 @@ def find_and_rag(concept, client, classname):
     })
     .with_limit(1)
     ).do()
-    print(result)
+    
 
     try:
         explanation_pseudo = result['data']['Get'][classname][0]['_additional']['generate']['singleResult']
         code = result['data']['Get'][classname][0]['output']
-        print(code)
         return explanation_pseudo, code
 
     except:

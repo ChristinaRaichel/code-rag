@@ -36,6 +36,7 @@ class TaskQueryClass(APIView):
             if task is not None:
                 qvb = queryVectorDB()
                 result = qvb.get_data(task)
+                print(result)
 
                 if result is not None:
                     response_data = {
@@ -44,7 +45,7 @@ class TaskQueryClass(APIView):
                         'data': result
                     }
                     print(response_data)
-                    return JsonResponse(response_data)
+                    return Response(response_data)
                 else:
                     return HttpResponseBadRequest("Failed to GET the data from vector database")
             else:
