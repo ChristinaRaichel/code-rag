@@ -17,18 +17,15 @@ from rest_framework.response import Response
 logger = logging.getLogger(__name__)
 
 class TaskQueryClass(APIView):
-    def __init__(self):
-        self.qvb = None
-        self.class_init_bool = False
-
-    @csrf_exempt
+        
     def get(self,request):
-        self.qvb = queryVectorDB()
-        if self.qvb == False : return
-        self.class_init_bool = self.qvb.initiate_weaviate_class()
-        return HttpResponseBadRequest("hello world")
+        qvb = queryVectorDB()
+        if qvb == False : return      
+        qvb.initiate_weaviate_class()
+        data = 'Powered by Weaviate'
+        return Response(data)
 
-    @csrf_exempt
+ 
     def post(self,request):
         try:
             data = json.loads(request.body)
@@ -37,22 +34,19 @@ class TaskQueryClass(APIView):
             logging.info('Obtained task input')
 
             if task is not None:
-                
-                if self.class_init_bool :
-                    result = self.qvb.get_data(task)
+                qvb = queryVectorDB()
+                result = qvb.get_data(task)
 
-                    if result is not None:
-                        response_data = {
-                            'status': 'success',
-                            'message': 'File received and processed successfully',
-                            'data': result
-                        }
-                        print(response_data)
-                        return JsonResponse(response_data)
-                    else:
-                        return HttpResponseBadRequest("Failed to GET the data from vector database")
+                if result is not None:
+                    response_data = {
+                        'status': 'success',
+                        'message': 'File received and processed successfully',
+                        'data': result
+                    }
+                    print(response_data)
+                    return JsonResponse(response_data)
                 else:
-                    return HttpResponseBadRequest("Error initiating weaviate collection")
+                    return HttpResponseBadRequest("Failed to GET the data from vector database")
             else:
                 return HttpResponseBadRequest("No input received")
         except json.JSONDecodeError:
