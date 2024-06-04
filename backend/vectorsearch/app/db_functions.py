@@ -53,36 +53,42 @@ def import_data(client,classname,dataset, batch_size = 200,timeout_retries=3):
             
             batch.add_data_object(properties, classname)
             counter = counter+1
-            if counter == 5: break
+            if counter == 1: break
             
         print(f"Import {counter} / {len(dataset)}")
     print("Import complete")
 
 
-def populate(client, classname):
+def load_data_create_class(client, classname):
     
     log.getLogger().setLevel(log.INFO)
 
     try:
         dataset = load_dataset('flytech/python-codes-25k', split='train')
-        log.info('loaded dataset')
+
     except:
-        print('an exception occured')
-        log.error('dataset not loaded')
+        print('an exception occured',exc_info=True)
+        log.error('Dataset not loaded from web')
+        return False
+    log.info('Loaded dataset from web')
 
   
     try:
         create_class(client, classname = classname)
-        log.info('class created')
     except:
-        log.error('class not created')
+        log.error('Class not created',exc_info=True)
+        return False
+    log.info('Class created')
+    
+    
         
     try:
         import_data(client,classname, dataset)
-        log.info('data imported in collection')
+        log.info('Data imported in collection')
     except:
-        log.error('Error importing data')
-
+        log.error('Error importing data',exc_info=True)
+        return False
+    return True
 
 
 def find_and_rag(concept, client, classname):
@@ -97,9 +103,12 @@ def find_and_rag(concept, client, classname):
     })
     .with_limit(1)
     ).do()
-    print(result)
-    if result:
+    
+
+    try:
         explanation_pseudo = result['data']['Get'][classname][0]['_additional']['generate']['singleResult']
         code = result['data']['Get'][classname][0]['output']
-    return explanation_pseudo, code
+        return explanation_pseudo, code
 
+    except:
+        log.error('Search data is null', exc_info=True)

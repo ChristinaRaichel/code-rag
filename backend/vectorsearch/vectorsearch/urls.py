@@ -17,9 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 #from django.conf.urls import url
-from app.views import *
+from app import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', ReactView.as_view(),name="api")
+    path(r'gencode/', views.TaskQueryClass.as_view()),
+    path(r'', include(router.urls))
+    
+
 ]
