@@ -3,6 +3,7 @@ import axios from "axios";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
+axios.defaults.timeout = 10000; 
 
 
 const Search= () => {
@@ -28,12 +29,24 @@ const Search= () => {
       })
       .finally(() => {
         setLoading(false); // Set loading state back to false when the request completes
-      });
-  };
+      })};
+  
 
-  const handleInputButtonChange = (value) => {
-    setQuery(value);
-  };
+
+
+  const handleInputButtonChange = async (value) => {
+  try {
+      setQuery(value);
+      handleSearch();
+      
+  } catch (error) {
+      if (error.code === 'ECONNABORTED') {
+          console.error('Request timed out');
+      } else {
+          console.error('Error:', error);
+      }
+  }
+};
 
 
   return (
@@ -73,7 +86,12 @@ const Search= () => {
       <div className="flex flex-col w-60">
         <button className="bg-white hover:bg-gray-100 text-blue-800 font-semibold py-2 px-4 border
          border-gray-400 rounded shadow"
-         onClick={function() {handleInputButtonChange("create shopping list"); handleSearch()}}>
+         onClick={() => {
+          handleInputButtonChange("create shopping list")
+          handleSearch()
+         }}
+         >
+          
           create shopping list</button>
           <button class="bg-white hover:bg-gray-100 text-green-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
           find cpu usage</button>
