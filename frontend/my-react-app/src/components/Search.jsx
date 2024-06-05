@@ -65,7 +65,7 @@ const Search= () => {
       <div>
       <header> Generated from django</header>
       {output.output}
-      <div>
+      <div class = "border-solid border-2 border-indigo-600">
       {output.explanation}
       </div>
       <div>
