@@ -2,3 +2,5 @@
 *.pyc
 *log.txt
 **/secrets.py
+**/db.sqlite3
+**/__pycache__
