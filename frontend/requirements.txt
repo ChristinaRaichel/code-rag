@@ -1,0 +1,3 @@
+axios
+prismjs
+react-syntax-highlighter
