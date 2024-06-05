@@ -53,12 +53,12 @@ class queryVectorDB():
         Returned data is the entire content
 
         """
-        concept = query
+        concept = '["' + query +'"]'
         client = self.client
         
 
         log.info('Generating code(Vector Search) and explanation (RAG based)')
-        concept =  ["code for shopping list"]
+        #concept =  ["code for shopping list"]
 
         try:
             explanation_pseudo, code = find_and_rag(concept, client, classname = self.classname)

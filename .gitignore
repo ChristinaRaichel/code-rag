@@ -3,3 +3,6 @@
 *log.txt
 **/secrets.py
 .env
+**/db.sqlite3
+**/__pycache__
+__pycache__

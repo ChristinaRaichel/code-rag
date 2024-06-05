@@ -19,9 +19,9 @@ logger = logging.getLogger(__name__)
 class TaskQueryClass(APIView):
         
     def get(self,request):
-        qvb = queryVectorDB()
-        if qvb == False : return      
-        qvb.initiate_weaviate_class()
+        #qvb = queryVectorDB()
+        #if qvb == False : return      
+        #qvb.initiate_weaviate_class()
         data = 'Powered by Weaviate'
         return Response(data)
 
@@ -45,7 +45,7 @@ class TaskQueryClass(APIView):
                         'data': result
                     }
                     print(response_data)
-                    return Response(response_data)
+                    return JsonResponse(response_data)
                 else:
                     return HttpResponseBadRequest("Failed to GET the data from vector database")
             else:
