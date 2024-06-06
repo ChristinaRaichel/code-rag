@@ -2,7 +2,7 @@
 *.pyc
 *log.txt
 **/secrets.py
+**/.env
 **/db.sqlite3
 **/__pycache__
-node_modules
-backend/
+**/node_modules
